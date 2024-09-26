@@ -4,6 +4,7 @@ import org.pj.Dto.Request.FeeCommandDto;
 import org.pj.Entity.FeeTransaction;
 import org.pj.Enum.TransactionStatus;
 import org.pj.Repository.IFeeTransactionRepository;
+import org.pj.Repository.Impl.FeeTransactionRepositoryImpl;
 import org.pj.Service.IFeeTransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,30 +18,27 @@ public class FeeTransactionServiceImpl implements IFeeTransactionService {
 
     private static final Logger logger = LoggerFactory.getLogger(FeeTransactionServiceImpl.class);
 
-    private final IFeeTransactionRepository feeTransactionRepository;
+    private final IFeeTransactionRepository feeTransactionRepository = new FeeTransactionRepositoryImpl();
 
-    public FeeTransactionServiceImpl(IFeeTransactionRepository feeTransactionRepository) {
-        this.feeTransactionRepository = feeTransactionRepository;
+    public FeeTransactionServiceImpl() {
     }
 
     @Override
     public void processFeeCommand(FeeCommandDto feeCommandDto) throws SQLException {
-        logger.info("Begin processFeeCommand with commandCode: " + feeCommandDto.getCommandCode());
+        logger.info("Begin processFeeCommand with commandCode: {}",feeCommandDto.getCommandCode());
 
-        // Lấy danh sách FeeTransaction theo commandCode
         List<FeeTransaction> transactions = feeTransactionRepository.getTransactionsByCommandCode(feeCommandDto.getCommandCode());
-        logger.info("Retrieved transactions with count: " + transactions.size());
+        logger.info("Retrieved transactions with count: {} ",transactions.size());
 
-        // Cập nhật các giao dịch
         for (FeeTransaction transaction : transactions) {
             transaction.setTotalScan(1);
             transaction.setModifiedDate(LocalDateTime.now());
             transaction.setStatus(TransactionStatus.THU_PHI.getCode());
         }
         feeTransactionRepository.updateFeeTransactions(transactions);
-        logger.info("Updated transactions with count: " + transactions.size());
+        logger.info("Updated transactions with count: {}",transactions.size());
 
-        logger.info("End processFeeCommand for commandCode: " + feeCommandDto.getCommandCode());
+        logger.info("End processFeeCommand for commandCode: {}",feeCommandDto.getCommandCode());
     }
 
     @Override
@@ -48,7 +46,7 @@ public class FeeTransactionServiceImpl implements IFeeTransactionService {
         logger.info("Begin cron job for updating FeeTransactions");
 
         List<FeeTransaction> transactions = feeTransactionRepository.getTransactionsByStatusAndTotalScan(TransactionStatus.THU_PHI.getCode(), 5);
-        logger.info("Retrieved transactions for cron job with count: " + transactions.size());
+        logger.info("Retrieved transactions for cron job with count: {}",transactions.size());
 
         for (FeeTransaction transaction : transactions) {
             transaction.setTotalScan(transaction.getTotalScan() + 1);
@@ -58,7 +56,7 @@ public class FeeTransactionServiceImpl implements IFeeTransactionService {
             }
         }
         feeTransactionRepository.updateFeeTransactions(transactions);
-        logger.info("Updated transactions in cron job with count: " + transactions.size());
+        logger.info("Updated transactions in cron job with count: {}",transactions.size());
 
         logger.info("End cron job for updating FeeTransactions");
     }

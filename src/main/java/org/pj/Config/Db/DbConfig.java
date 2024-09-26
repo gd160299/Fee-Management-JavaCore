@@ -12,8 +12,8 @@ public class DbConfig {
     static {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:oracle:thin:@localhost:1521:xe");
-        config.setUsername("username");
-        config.setPassword("password");
+        config.setUsername("FEE_DEV");
+        config.setPassword("FEE_DEV");
         config.setDriverClassName("oracle.jdbc.driver.OracleDriver");
         config.setMaximumPoolSize(20); // So luong ket noi toi da
         config.setMinimumIdle(5); // So luong ket noi toi thieu
