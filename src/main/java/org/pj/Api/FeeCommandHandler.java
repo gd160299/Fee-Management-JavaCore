@@ -22,7 +22,6 @@ public class FeeCommandHandler extends SimpleChannelInboundHandler<FullHttpReque
 
     private static final String ADD_FEE_COMMAND_URI = "/api/fee-commands/add";
     private static final String SUCCESS_MESSAGE = "{\"status\":200, \"message\":\"Fee command added successfully.\"}";
-    private static final String RESOURCE_NOT_FOUND = "{\"status\":404, \"message\":\"Resource not found\"}";
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
@@ -38,7 +37,7 @@ public class FeeCommandHandler extends SimpleChannelInboundHandler<FullHttpReque
             feeCommandService.addFeeCommand(feeCommandDto);
             sendHttpResponse(ctx, SUCCESS_MESSAGE, HttpResponseStatus.OK);
         } else {
-            sendHttpResponse(ctx, RESOURCE_NOT_FOUND, HttpResponseStatus.NOT_FOUND);
+            ctx.fireChannelRead(request.retain());
         }
     }
 }

@@ -44,7 +44,4 @@ public class FeeCommandProcessingHandler extends SimpleChannelInboundHandler<Ful
             sendHttpResponse(ctx, RESOURCE_NOT_FOUND, HttpResponseStatus.NOT_FOUND);
         }
     }
-
-
-
 }
