@@ -4,13 +4,21 @@ import oracle.jdbc.OracleTypes;
 import org.pj.Config.Db.DbConfig;
 import org.pj.Entity.FeeTransaction;
 import org.pj.Repository.IFeeTransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeeTransactionRepositoryImpl implements IFeeTransactionRepository {
+
+    private static final Logger logger = LoggerFactory.getLogger(FeeTransactionRepositoryImpl.class);
 
     @Override
     public void insertFeeTransactions(List<FeeTransaction> transactions) throws SQLException {
@@ -94,7 +102,7 @@ public class FeeTransactionRepositoryImpl implements IFeeTransactionRepository {
 
             connection.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error updating fee transactions", e);
             throw e;
         }
     }

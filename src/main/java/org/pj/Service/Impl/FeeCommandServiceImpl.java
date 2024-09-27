@@ -1,6 +1,5 @@
 package org.pj.Service.Impl;
 
-import io.netty.handler.codec.http.HttpResponseStatus;
 import org.pj.Config.Db.DbConfig;
 import org.pj.Config.Redis.RedisConfig;
 import org.pj.Dto.Request.FeeCommandDto;
@@ -108,7 +107,7 @@ public class FeeCommandServiceImpl implements IFeeCommandService {
         return String.format("TRX%s", UUID.randomUUID());
     }
 
-    private void validate(FeeCommandDto objInput) throws Exception {
+    private void validate(FeeCommandDto objInput) {
         // Kiểm tra trùng requestId
         Jedis jedis = null;
         try {
