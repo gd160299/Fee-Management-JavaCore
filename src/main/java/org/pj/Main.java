@@ -9,10 +9,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
-import org.pj.Api.FeeCommandHandler;
-import org.pj.Api.FeeCommandProcessingHandler;
-import org.pj.Exception.ExceptionHandler;
-import org.pj.Service.Impl.FeeTransactionServiceImpl;
+import org.pj.api.FeeCommandHandler;
+import org.pj.api.FeeCommandProcessingHandler;
+import org.pj.exception.ExceptionHandler;
+import org.pj.service.IFeeTransactionService;
+import org.pj.service.impl.FeeTransactionServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class Main {
     }
 
     private static void runJob() {
-        FeeTransactionServiceImpl feeTransactionService = new FeeTransactionServiceImpl();
+        IFeeTransactionService feeTransactionService = new FeeTransactionServiceImpl();
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         Runnable task = () -> {
             try {
@@ -68,7 +69,7 @@ public class Main {
             ChannelFuture f = b.bind(8082).sync();
             f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            logger.error("Netty server was interrupted", e);
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
