@@ -75,7 +75,7 @@ public class FeeTransactionRepositoryImpl implements IFeeTransactionRepository {
 
     @Override
     public List<FeeTransaction> getTransactionsByStatusAndTotalScan(String status, int totalScan) throws SQLException {
-        logger.info("Begin: getTransactionsByStatusAndTotalScan with status: {} and totalScan: {}", status, totalScan);
+        logger.info("Begin: getTransactionsByStatusAndTotalScan");
 
         List<FeeTransaction> transactions = new ArrayList<>();
         String sql = "{call PKG_FEE_MANAGEMENT.GET_FEE_TRANS_BY_STATUS_SCAN(?, ?, ?)}";
