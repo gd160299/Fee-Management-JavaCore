@@ -1,10 +1,10 @@
 package org.pj.config;
 
-import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.Sources;
+import org.aeonbits.owner.Reloadable;
 
 @Sources("file:./config/config.properties")
-public interface AppConfig extends Config {
+public interface AppConfig extends Reloadable {
     // Redis configuration
     @Key("redis.host")
     String redisHost();
